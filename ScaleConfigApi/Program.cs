@@ -18,6 +18,10 @@ builder.Services.AddOpenApi();
 builder.Services.AddSingleton<ScaleFileGenerator>();
 
 var app = builder.Build();
+app.MapOpenApi();
+app.MapScalarApiReference();
+
+app.MapGet("/", () => Results.Redirect("/scalar"));
 
 // 3. Define the API endpoint
 app.MapPost("/generate-scale-configs", 
@@ -43,8 +47,5 @@ app.MapPost("/generate-scale-configs",
         return Results.Problem(ex.Message, statusCode: 500);
     }
 });
-
-app.MapOpenApi();
-app.MapScalarApiReference();
 
 app.Run();
