@@ -3,15 +3,22 @@
 /// <summary>
 /// Input: Represents a single product to be linked to a tag.
 /// </summary>
-/// <param name="PluNumber">The PLU number (e.g., 10).</param>
-/// <param name="TagId">The 9-digit physical tag ID (e.g., "111111111").</param>
-/// <param name="ProductName">A human-readable name (e.g., "Angus Beef").</param>
-/// <param name="ImageId">The image number on the scale (e.g., 42).</param>
 public record ProductTagLink(
     int PluNumber,
     string TagId,
     string ProductName,
     int ImageId
+);
+
+// --- NEW MODEL ---
+/// <summary>
+/// Input: The full request for generating and uploading files to a scale.
+/// </summary>
+/// <param name="ScaleIpAddress">The IP address of the target scale.</param>
+/// <param name="Products">The array of products to link.</param>
+public record ScaleUploadRequest(
+    string ScaleIpAddress,
+    ProductTagLink[] Products
 );
 
 /// <summary>
@@ -24,13 +31,20 @@ public record ScaleFileGenerationResult(
 /// <summary>
 /// Output: Represents a single generated configuration file.
 /// </summary>
-/// <param name="FileName">Descriptive name (e.g., "PLU4 FILE").</param>
-/// <param name="FileNumberHex">The hex file ID (e.g., "AAH").</param>
-/// <param name="FileNumberDecimal">The decimal file ID (e.g., 170).</param>
-/// <param name="ContentBase64">The binary file content, encoded as a Base64 string.</param>
 public record ScaleFile(
     string FileName,
     string FileNumberHex,
     int FileNumberDecimal,
     string ContentBase64
+);
+
+// --- NEW MODEL ---
+/// <summary>
+/// Output: The result of the local upload attempt.
+/// </summary>
+/// <param name="Message">A summary message.</param>
+/// <param name="UploadLog">A detailed log of the upload commands.</param>
+public record ScaleUploadResult(
+    string Message,
+    List<string> UploadLog
 );
