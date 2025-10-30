@@ -1,7 +1,8 @@
-using System.Text.Json.Serialization;
+using Scalar.AspNetCore;
 using ScaleConfigApi;
 using ScaleConfigApi.Models;
 using ScaleConfigApi.Services;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
@@ -13,6 +14,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 });
 
 // 2. Register the service for generating scale files
+builder.Services.AddOpenApi();
 builder.Services.AddSingleton<ScaleFileGenerator>();
 
 var app = builder.Build();
@@ -41,5 +43,8 @@ app.MapPost("/generate-scale-configs",
         return Results.Problem(ex.Message, statusCode: 500);
     }
 });
+
+app.MapOpenApi();
+app.MapScalarApiReference();
 
 app.Run();
